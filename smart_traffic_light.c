@@ -213,17 +213,17 @@ void vSemaphoreTask(void *pvParameters) {
             semaphore_state = GREEN;
             set_rgb_led(0, 255, 0);
             set_matrix_color(0, 255, 0);
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            vTaskDelay(pdMS_TO_TICKS(3000));
             // Amarelo
             semaphore_state = YELLOW;
             set_rgb_led(255, 255, 0);
             set_matrix_color(255, 255, 0);
-            vTaskDelay(pdMS_TO_TICKS(2000));
+            vTaskDelay(pdMS_TO_TICKS(3000));
             // Vermelho
             semaphore_state = RED;
             set_rgb_led(255, 0, 0);
             set_matrix_color(255, 0, 0);
-            vTaskDelay(pdMS_TO_TICKS(5000));
+            vTaskDelay(pdMS_TO_TICKS(3000));
         }
     }
 }
@@ -237,21 +237,32 @@ void vBuzzersTask(void *pvParameters) {
             vTaskDelay(pdMS_TO_TICKS(2000));
         } else {
             switch (semaphore_state) {
-                case GREEN:
-                    // Beep curto a cada segundo
-                    buzzer_beep(100);
-                    vTaskDelay(pdMS_TO_TICKS(1000));
+                case GREEN: {
+                    // Beep de 1s, pausa de 200ms, por 3s
+                    for (int i = 0; i < 2; i++) {
+                        buzzer_beep(1000);
+                        vTaskDelay(pdMS_TO_TICKS(200));
+                    }
+                    buzzer_beep(600); // Último beep ajustado para 3s totais
                     break;
-                case YELLOW:
-                    // Beeps rápidos
-                    buzzer_beep(200);
-                    vTaskDelay(pdMS_TO_TICKS(400));
+                }
+                case YELLOW: {
+                    // Beep de 350ms, pausa de 50ms, por 3s
+                    for (int i = 0; i < 7; i++) {
+                        buzzer_beep(350);
+                        vTaskDelay(pdMS_TO_TICKS(50));
+                    }
+                    buzzer_beep(200); // Último beep ajustado para 3s totais
                     break;
-                case RED:
-                    // Tom contínuo intermitente
+                }
+                case RED: {
+                    // Beep de 500ms, pausa de 1500ms, por 3s
                     buzzer_beep(500);
-                    vTaskDelay(pdMS_TO_TICKS(2000));
+                    vTaskDelay(pdMS_TO_TICKS(1500));
+                    buzzer_beep(500);
+                    vTaskDelay(pdMS_TO_TICKS(500)); // Ajustado para 3s totais
                     break;
+                }
             }
         }
     }
